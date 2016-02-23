@@ -695,9 +695,14 @@ class Page(six.with_metaclass(PageBase, MP_Node, ClusterableModel, index.Indexed
         root_paths = Site.get_site_root_paths()
         for (id, root_path, root_url) in root_paths:
             if self.url_path.startswith(root_path):
-                return ('' if len(root_paths) == 1 else root_url) + reverse(
+                url = reverse(
                     'wagtail_serve', args=(self.url_path[len(root_path):],)
                 )
+
+                if not getattr(settings, 'WAGTAIL_APPEND_SLASH', True):
+                    url = url.rstrip('/')
+
+                return ('' if len(root_paths) == 1 else root_url) + url
 
     def relative_url(self, current_site):
         """
@@ -707,9 +712,14 @@ class Page(six.with_metaclass(PageBase, MP_Node, ClusterableModel, index.Indexed
         """
         for (id, root_path, root_url) in Site.get_site_root_paths():
             if self.url_path.startswith(root_path):
-                return ('' if current_site.id == id else root_url) + reverse(
+                url = reverse(
                     'wagtail_serve', args=(self.url_path[len(root_path):],)
                 )
+
+                if not getattr(settings, 'WAGTAIL_APPEND_SLASH', True):
+                    url = url.rstrip('/')
+
+                return ('' if current_site.id == id else root_url) + url
 
     @classmethod
     def get_indexed_objects(cls):
