@@ -8,7 +8,7 @@ from wagtail.wagtailcore.utils import WAGTAIL_APPEND_SLASH
 if WAGTAIL_APPEND_SLASH:
     serve_pattern = r'^((?:[\w\-]+/)*)$'
 else:
-    serve_pattern = r'^((?:[\w\-]+/?)*)$'
+    serve_pattern = r'^(.*)$'
 
 
 urlpatterns = [
